@@ -1,0 +1,54 @@
+﻿@using LibraryManagement.Enums
+@model LibraryManagement.Models.Loan
+
+@{
+    ViewData["Title"] = "Loan Details";
+    var isOverdue = Model.ReturnDate == null && Model.DueDate < DateTime.Now;
+}
+
+<h1>Loan Details</h1>
+
+<dl class="row">
+    <dt class="col-sm-3">Book</dt>
+    <dd class="col-sm-9">
+        <a asp-controller="Books" asp-action="Details" asp-route-id="@Model.BookId">@Model.Book.Title</a>
+    </dd>
+
+    <dt class="col-sm-3">Member</dt>
+    <dd class="col-sm-9">
+        <a asp-controller="Members" asp-action="Details" asp-route-id="@Model.MemberId">@Model.Member.FullName</a>
+    </dd>
+
+    <dt class="col-sm-3">Loan Date</dt>
+    <dd class="col-sm-9">@Model.LoanDate.ToString("yyyy/MM/dd HH:mm")</dd>
+
+    <dt class="col-sm-3">Due Date</dt>
+    <dd class="col-sm-9">@Model.DueDate.ToString("yyyy/MM/dd HH:mm")</dd>
+
+    <dt class="col-sm-3">Return Date</dt>
+    <dd class="col-sm-9">@(Model.ReturnDate?.ToString("yyyy/MM/dd HH:mm") ?? "-")</dd>
+
+    <dt class="col-sm-3">Status</dt>
+    <dd class="col-sm-9">
+        @if (Model.ReturnDate != null)
+        {
+            <span class="badge bg-success">Returned</span>
+        }
+        else if (isOverdue)
+        {
+            <span class="badge bg-danger">Overdue</span>
+        }
+        else
+        {
+            <span class="badge bg-primary">Active</span>
+        }
+    </dd>
+
+    @if (Model.FineAmount > 0)
+    {
+        <dt class="col-sm-3">Fine</dt>
+        <dd class="col-sm-9">@Model.FineAmount.ToString("0.00")</dd>
+    }
+</dl>
+
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

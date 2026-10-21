@@ -1,0 +1,46 @@
+﻿@model LibraryManagement.Models.Author
+
+@{
+    ViewData["Title"] = Model.FullName;
+}
+
+<h1>@Model.FullName</h1>
+
+@if (!string.IsNullOrWhiteSpace(Model.Bio))
+{
+    <p class="text-muted" style="white-space: pre-line;">@Model.Bio</p>
+}
+
+<h4 class="mt-4">Books (@Model.Books.Count)</h4>
+
+@if (!Model.Books.Any())
+{
+    <p class="text-muted">This author has no books yet.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Year</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in Model.Books.OrderBy(b => b.Title))
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">@book.Title</a>
+                    </td>
+                    <td>@book.PublishedYear</td>
+                    <td><span class="badge bg-secondary">@book.Category.Name</span></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

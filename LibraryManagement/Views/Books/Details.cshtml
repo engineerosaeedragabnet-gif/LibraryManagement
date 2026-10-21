@@ -1,0 +1,59 @@
+﻿@model LibraryManagement.Models.Book
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        @if (!string.IsNullOrEmpty(Model.CoverImagePath))
+        {
+            <img src="@Model.CoverImagePath" alt="@Model.Title" class="img-fluid rounded shadow-sm" />
+        }
+        else
+        {
+            <div class="bg-light border rounded d-flex align-items-center justify-content-center text-muted"
+                 style="height:300px;">
+                No cover
+            </div>
+        }
+    </div>
+
+    <div class="col-md-8">
+        <h1>@Model.Title</h1>
+
+        <dl class="row">
+            <dt class="col-sm-4">Author</dt>
+            <dd class="col-sm-8">
+                <a asp-controller="Authors" asp-action="Details" asp-route-id="@Model.AuthorId">
+                    @Model.Author.FullName
+                </a>
+            </dd>
+
+            <dt class="col-sm-4">Category</dt>
+            <dd class="col-sm-8"><span class="badge bg-secondary">@Model.Category.Name</span></dd>
+
+            <dt class="col-sm-4">ISBN</dt>
+            <dd class="col-sm-8">@Model.ISBN</dd>
+
+            <dt class="col-sm-4">Published Year</dt>
+            <dd class="col-sm-8">@Model.PublishedYear</dd>
+
+            <dt class="col-sm-4">Availability</dt>
+            <dd class="col-sm-8">
+                @if (Model.AvailableCopies > 0)
+                {
+                    <span class="badge bg-success">Available</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">Out of stock</span>
+                }
+                <span class="ms-2">@Model.AvailableCopies of @Model.TotalCopies copies</span>
+            </dd>
+        </dl>
+
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>

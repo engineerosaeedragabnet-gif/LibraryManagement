@@ -1,0 +1,44 @@
+﻿@model LibraryManagement.ViewModels.LoanCreateViewModel
+
+@{
+    ViewData["Title"] = "New Loan";
+}
+
+<h1>New Loan</h1>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="MemberId" class="form-label"></label>
+        <select asp-for="MemberId" asp-items="ViewBag.Members" class="form-select">
+            <option value="0">-- Select a member --</option>
+        </select>
+        <span asp-validation-for="MemberId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="BookId" class="form-label"></label>
+        <select asp-for="BookId" asp-items="ViewBag.Books" class="form-select">
+            <option value="0">-- Select a book --</option>
+        </select>
+        <span asp-validation-for="BookId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="LoanDays" class="form-label"></label>
+        <select asp-for="LoanDays" class="form-select">
+            <option value="7">7 days</option>
+            <option value="14">14 days</option>
+            <option value="21">21 days</option>
+        </select>
+        <span asp-validation-for="LoanDays" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Borrow</button>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

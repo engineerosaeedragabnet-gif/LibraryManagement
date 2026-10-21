@@ -1,0 +1,61 @@
+﻿## ---------- Build output ----------
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ll]og/
+[Ll]ogs/
+
+## ---------- Visual Studio ----------
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+launchSettings.json.user
+.vscode/
+
+## ---------- ReSharper / Rider ----------
+_ReSharper*/
+*.DotSettings.user
+.idea/
+
+## ---------- NuGet ----------
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## ---------- Test results ----------
+[Tt]est[Rr]esult*/
+*.trx
+coverage*.xml
+
+## ---------- Publish ----------
+PublishScripts/
+*.pubxml
+*.pubxml.user
+*.publish.xml
+
+## ---------- Secrets  ----------
+secrets.json
+appsettings.Production.json
+appsettings.*.local.json
+*.pfx
+
+## ---------- Logs & temp ----------
+*.log
+*.tmp
+*.bak
+~$*
+
+## ---------- OS files ----------
+.DS_Store
+Thumbs.db
+Desktop.ini

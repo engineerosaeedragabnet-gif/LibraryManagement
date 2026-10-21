@@ -1,0 +1,38 @@
+﻿@model LibraryManagement.Models.Loan
+
+@{
+    ViewData["Title"] = "Return Book";
+    var expectedFine = (decimal)ViewBag.ExpectedFine;
+}
+
+<h1>Return Book</h1>
+
+<dl class="row">
+    <dt class="col-sm-3">Book</dt>
+    <dd class="col-sm-9">@Model.Book.Title</dd>
+
+    <dt class="col-sm-3">Member</dt>
+    <dd class="col-sm-9">@Model.Member.FullName</dd>
+
+    <dt class="col-sm-3">Loan Date</dt>
+    <dd class="col-sm-9">@Model.LoanDate.ToString("yyyy/MM/dd HH:mm")</dd>
+
+    <dt class="col-sm-3">Due Date</dt>
+    <dd class="col-sm-9">@Model.DueDate.ToString("yyyy/MM/dd HH:mm")</dd>
+</dl>
+
+@if (expectedFine > 0)
+{
+    <div class="alert alert-warning">
+        This loan is overdue. Late fine: <strong>@expectedFine.ToString("0.00")</strong>
+    </div>
+}
+else
+{
+    <div class="alert alert-success">Returned on time. No fine.</div>
+}
+
+<form asp-action="Return" asp-route-id="@Model.Id" method="post" class="d-inline">
+    <button type="submit" class="btn btn-success">Confirm Return</button>
+</form>
+<a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">Cancel</a>

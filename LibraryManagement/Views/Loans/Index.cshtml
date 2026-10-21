@@ -1,0 +1,123 @@
+﻿@model LibraryManagement.ViewModels.LoanListViewModel
+
+@{
+    ViewData["Title"] = "Loans";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Loans</h1>
+    <a asp-action="Create" class="btn btn-primary">+ New Loan</a>
+</div>
+
+<!-- Search & Filter -->
+<form asp-action="Index" method="get" class="row g-2 mb-4">
+    <div class="col-md-5">
+        <input type="text" name="searchTerm" value="@Model.SearchTerm"
+               class="form-control" placeholder="Search by member or book..." />
+    </div>
+
+    <div class="col-md-3">
+        <select name="filter" class="form-select">
+            <option value="all" selected="@(Model.Filter == "all")">All</option>
+            <option value="active" selected="@(Model.Filter == "active")">Active</option>
+            <option value="overdue" selected="@(Model.Filter == "overdue")">Overdue</option>
+            <option value="returned" selected="@(Model.Filter == "returned")">Returned</option>
+        </select>
+    </div>
+
+    <div class="col-md-4 d-flex gap-2">
+        <button type="submit" class="btn btn-dark">Search</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Reset</a>
+    </div>
+</form>
+
+@if (Model.TotalItems > 0)
+{
+    <p class="text-muted">Showing @Model.Loans.Count of @Model.TotalItems loans</p>
+}
+
+@if (!Model.Loans.Any())
+{
+    <div class="alert alert-warning">No loans found.</div>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Book</th>
+                <th>Member</th>
+                <th>Loan Date</th>
+                <th>Due Date</th>
+                <th>Return Date</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Loans)
+            {
+                <tr class="@(item.IsOverdue ? "table-danger" : "")">
+                    <td>
+                        <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">@item.BookTitle</a>
+                    </td>
+                    <td>
+                        <a asp-controller="Members" asp-action="Details" asp-route-id="@item.MemberId">@item.MemberName</a>
+                    </td>
+                    <td>@item.LoanDate.ToString("yyyy/MM/dd")</td>
+                    <td>@item.DueDate.ToString("yyyy/MM/dd")</td>
+                    <td>@(item.ReturnDate?.ToString("yyyy/MM/dd") ?? "-")</td>
+                    <td>
+                        @if (item.ReturnDate != null)
+                        {
+                            <span class="badge bg-success">Returned</span>
+                        }
+                        else if (item.IsOverdue)
+                        {
+                            <span class="badge bg-danger">Overdue</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-primary">Active</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<!-- Pagination -->
+@if (Model.TotalPages > 1)
+{
+    <nav aria-label="Loans pagination">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                <a class="page-link" asp-action="Index"
+                   asp-route-page="@(Model.CurrentPage - 1)"
+                   asp-route-searchTerm="@Model.SearchTerm"
+                   asp-route-filter="@Model.Filter">Previous</a>
+            </li>
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-page="@i"
+                       asp-route-searchTerm="@Model.SearchTerm"
+                       asp-route-filter="@Model.Filter">@i</a>
+                </li>
+            }
+
+            <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                <a class="page-link" asp-action="Index"
+                   asp-route-page="@(Model.CurrentPage + 1)"
+                   asp-route-searchTerm="@Model.SearchTerm"
+                   asp-route-filter="@Model.Filter">Next</a>
+            </li>
+        </ul>
+    </nav>
+}
